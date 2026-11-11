@@ -89,3 +89,13 @@ def test_missing_version_keys_only_warn(fake_artifacts: Path) -> None:
 def test_main_exit_codes(fake_artifacts: Path, tmp_path: Path) -> None:
     assert ca.main(["--artifacts-dir", str(fake_artifacts), "--skip-versions"]) == 0
     assert ca.main(["--artifacts-dir", str(tmp_path / "khong-co")]) == 1
+
+
+def test_skip_models_only_checks_demo_data(tmp_path: Path) -> None:
+    root = make_fake_artifacts(tmp_path / "a")
+    for p in (root / "models").iterdir():
+        p.unlink()
+    for p in (root / "graphs").iterdir():
+        p.unlink()
+    assert not ca.check(root, versions=False).ok
+    assert ca.check(root, models=False).ok

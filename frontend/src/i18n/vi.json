@@ -2,41 +2,193 @@
   "app": { "name": "PropaGraph" },
   "nav": {
     "label": "Điều hướng chính",
+    "skip": "Bỏ qua tới nội dung",
     "explorer": "Đồ thị",
     "results": "Kết quả",
     "dataReliability": "Độ tin cậy dữ liệu",
-    "about": "Giới thiệu"
+    "about": "Giới thiệu",
+    "admin": "Hệ thống"
   },
   "tools": {
-    "language": "English",
-    "darkMode": "Giao diện tối",
-    "lightMode": "Giao diện sáng"
+    "language": "EN",
+    "languageAria": "Chuyển sang tiếng Anh",
+    "darkMode": "Chuyển sang giao diện tối",
+    "lightMode": "Chuyển sang giao diện sáng",
+    "logout": "Đăng xuất"
+  },
+  "roles": { "admin": "quản trị", "user": "người dùng" },
+  "banner": {
+    "synthetic": "Đang dùng dữ liệu giả để phát triển giao diện. Không dùng số liệu hay ảnh chụp màn hình này trong báo cáo."
   },
   "footer": {
     "disclaimer": "Hệ thống minh họa cho đồ án học thuật, chỉ chạy trên dữ liệu UPFD đã công bố. Kết quả không phải là kết luận kiểm chứng thông tin."
   },
-  "common": { "notBuilt": "Trang này chưa được xây dựng (task {{task}})." },
+  "common": {
+    "loading": "Đang tải…",
+    "error": "Không tải được dữ liệu: {{message}}",
+    "retry": "Thử lại",
+    "empty": "Chưa có dữ liệu.",
+    "yes": "Có",
+    "no": "Không",
+    "none": "Chưa có"
+  },
+  "time": {
+    "unknown": "Không rõ",
+    "minutes": "{{value}} phút",
+    "hours": "{{value}} giờ",
+    "days": "{{value}} ngày",
+    "all": "Toàn bộ"
+  },
+  "labels": { "fake": "Giả", "real": "Thật", "unknown": "Không rõ" },
+  "datasets": { "politifact": "PolitiFact", "gossipcop": "GossipCop" },
+  "features": { "profile": "Hồ sơ người dùng", "bert": "BERT" },
+  "tree": {
+    "aria": "Cây lan truyền: đang hiện {{visible}} trên {{total}} node",
+    "rootTitle": "Nút gốc: bản tin",
+    "nodeTitle": "Node {{id}}, độ sâu {{depth}}, xuất hiện sau {{time}}, {{degree}} lượt chia sẻ tiếp",
+    "legend": "Chú giải cây lan truyền",
+    "legendRoot": "Bản tin (gốc)",
+    "legendTime": "Thời điểm chia sẻ",
+    "legendSize": "Node lớn hơn: được chia sẻ tiếp nhiều hơn"
+  },
+  "detail": {
+    "back": "Danh sách đồ thị",
+    "panel": "Dự đoán và thông tin đồ thị",
+    "feature": "Đặc trưng người dùng",
+    "observedUntil": "Quan sát đến",
+    "nodesVisible": "{{used}} / {{total}} node",
+    "modelPendingTitle": "Chưa có dự đoán",
+    "modelPendingBody": "Model GNN đang được huấn luyện. Xác suất sẽ hiện ở đây khi model được nạp vào hệ thống.",
+    "trueLabel": "Nhãn thật",
+    "probFake": "Xác suất là tin giả",
+    "curveProb": "Xác suất tin giả theo thời gian quan sát",
+    "curveNodes": "Số node quan sát được theo thời gian",
+    "curveAria": "Biểu đồ theo các mốc thời gian quan sát",
+    "nodes": "Số node",
+    "depth": "Độ sâu",
+    "span": "Thời gian lan truyền",
+    "newsId": "Mã FakeNewsNet"
+  },
+  "explorer": {
+    "title": "Cây lan truyền",
+    "lead": "Đồ thị test của UPFD. Chọn một cây để xem cách bản tin lan truyền và mô phỏng phát hiện sớm.",
+    "dataset": "Tập dữ liệu",
+    "label": "Nhãn",
+    "allLabels": "Tất cả",
+    "nodes": "Số node",
+    "minNodes": "Số node tối thiểu",
+    "maxNodes": "Số node tối đa",
+    "min": "Từ",
+    "max": "Đến",
+    "sort": "Sắp xếp",
+    "sorts": {
+      "gid": "Theo mã",
+      "-n_nodes": "Nhiều node trước",
+      "n_nodes": "Ít node trước",
+      "-depth": "Sâu nhất trước",
+      "-span_h": "Lan truyền lâu nhất trước"
+    },
+    "search": "Tìm theo tiêu đề",
+    "searchPlaceholder": "Nhập từ khoá",
+    "empty": "Không có đồ thị khớp bộ lọc. Thử nới khoảng số node hoặc xoá từ khoá.",
+    "count_other": "{{count}} đồ thị",
+    "col": {
+      "gid": "Mã",
+      "title": "Tiêu đề",
+      "label": "Nhãn",
+      "nodes": "Node",
+      "depth": "Độ sâu",
+      "span": "Thời gian",
+      "growth": "Tăng trưởng"
+    },
+    "untitled": "Không có tiêu đề ({{id}})",
+    "growthTitle": "Số node theo các mốc thời gian",
+    "pager": "Phân trang",
+    "prev": "Trước",
+    "next": "Sau",
+    "page": "Trang {{page}} / {{pages}}"
+  },
+  "results": {
+    "title": "Kết quả thực nghiệm",
+    "lead": "Bảng xuất từ notebook, hiển thị nguyên văn. Diễn giải dưới mỗi bảng do nhóm viết.",
+    "empty": "Chưa có bảng kết quả. Notebook cần xuất tables/ và results.csv vào artifacts.",
+    "figures": "Hình",
+    "noInterpretation": "Nhóm chưa viết diễn giải cho bảng này."
+  },
+  "reliability": {
+    "title": "Độ tin cậy dữ liệu",
+    "lead": "Những điểm cần biết về UPFD trước khi đọc kết quả, rút ra ở notebook §1.",
+    "topicsTitle": "Các phát hiện",
+    "topics": {
+      "labels": "Quy ước nhãn",
+      "nodeOrder": "Chỉ số node không phải thứ tự thời gian",
+      "timeNoise": "Nhiễu thời gian ở PolitiFact",
+      "gossipcopIds": "Mã bản tin GossipCop",
+      "duplicateTitles": "Tiêu đề trùng",
+      "rootUser": "Nút gốc trùng người dùng"
+    },
+    "empty": "Chưa có bảng độ tin cậy dữ liệu trong artifacts."
+  },
+  "about": {
+    "title": "Giới thiệu",
+    "lead": "PropaGraph minh họa đề tài phát hiện tin giả dựa trên đồ thị lan truyền bằng mạng nơ-ron đồ thị.",
+    "methodTitle": "Phương pháp",
+    "method": "Mỗi bản tin là một cây lan truyền: nút gốc là bản tin, các nút còn lại là người dùng đã chia sẻ, cạnh là quan hệ chia sẻ. Các mô hình GNN (GCN, GAT, GraphSAGE, GIN) học biểu diễn của cả cây để dự đoán thật hay giả, trên bộ dữ liệu UPFD gồm PolitiFact và GossipCop. Đề tài trả lời ba câu hỏi:",
+    "questions": [
+      "Cấu trúc lan truyền đóng góp bao nhiêu so với đặc trưng nội dung và người dùng?",
+      "Loại đặc trưng và kiến trúc nào quan trọng nhất?",
+      "Có thể phát hiện sớm đến mức nào khi chỉ thấy một phần cây lan truyền?"
+    ],
+    "scopeTitle": "Phạm vi",
+    "doesTitle": "Hệ thống làm",
+    "does": [
+      "Duyệt cây lan truyền mẫu của PolitiFact và GossipCop.",
+      "Vẽ cây theo bố cục radial, màu theo thời gian, kích thước theo số lượt chia sẻ tiếp.",
+      "Dự đoán thật hay giả kèm xác suất bằng model GNN đã huấn luyện.",
+      "Mô phỏng phát hiện sớm bằng thanh thời gian.",
+      "Hiển thị kết quả thực nghiệm và độ tin cậy dữ liệu từ notebook."
+    ],
+    "doesNotTitle": "Hệ thống không làm",
+    "doesNot": [
+      "Không nhận URL hay văn bản tin tức mới: UPFD không có văn bản gốc và đặc trưng người dùng không còn thu thập lại được.",
+      "Không huấn luyện lại model.",
+      "Không phải công cụ kiểm chứng tin tức thực tế."
+    ],
+    "teamTitle": "Nhóm thực hiện",
+    "course": "Đồ án chuyên ngành 2, lớp 23GITB, Trường ĐH CNTT và Truyền thông Việt - Hàn.",
+    "supervisor": "Giảng viên hướng dẫn",
+    "citationsTitle": "Dữ liệu và trích dẫn",
+    "disclaimerTitle": "Miễn trừ"
+  },
+  "login": {
+    "title": "Đăng nhập",
+    "intro": "Dùng tài khoản được cấp cho buổi demo.",
+    "username": "Tên đăng nhập",
+    "password": "Mật khẩu",
+    "invalid": "Sai tên đăng nhập hoặc mật khẩu. Kiểm tra lại rồi thử lần nữa.",
+    "failed": "Không kết nối được máy chủ. Kiểm tra backend đang chạy rồi thử lại.",
+    "submit": "Đăng nhập",
+    "submitting": "Đang đăng nhập…"
+  },
+  "admin": {
+    "forbidden": "Trang này chỉ dành cho tài khoản quản trị.",
+    "title": "Hệ thống",
+    "lead": "Tình trạng artifacts đang nạp. Sau khi copy bản export mới, bấm nạp lại.",
+    "artifactsDir": "Thư mục artifacts",
+    "loadedAt": "Nạp lúc",
+    "synthetic": "Dữ liệu giả",
+    "datasets": "Số đồ thị",
+    "tables": "Bảng",
+    "figures": "Số hình",
+    "modelCard": "Model card",
+    "models": "Model đã nạp",
+    "problems": "Lỗi",
+    "notes": "Ghi chú",
+    "reload": "Nạp lại artifacts",
+    "reloading": "Đang nạp lại…",
+    "reloaded": "Đã nạp lại artifacts."
+  },
   "pages": {
-    "explorer": {
-      "title": "Duyệt cây lan truyền",
-      "summary": "Danh sách đồ thị test của PolitiFact và GossipCop, lọc theo nhãn, kích thước và tiêu đề."
-    },
-    "graphDetail": {
-      "title": "Chi tiết cây lan truyền",
-      "summary": "Cây lan truyền, thanh thời gian và xác suất dự đoán theo phần cây đã quan sát."
-    },
-    "results": {
-      "title": "Kết quả thực nghiệm",
-      "summary": "Các bảng E0–E6 đọc từ kết quả notebook."
-    },
-    "dataReliability": {
-      "title": "Độ tin cậy dữ liệu",
-      "summary": "Các phát hiện về dữ liệu UPFD ở notebook §1."
-    },
-    "about": {
-      "title": "Giới thiệu",
-      "summary": "Phương pháp, nhóm thực hiện và phạm vi của hệ thống."
-    },
-    "notFound": { "title": "Không tìm thấy trang", "back": "Về trang đồ thị" }
+    "notFound": { "title": "Không tìm thấy trang", "back": "Về danh sách đồ thị" }
   }
 }

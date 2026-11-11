@@ -35,12 +35,41 @@
 
 ## Cấu trúc thư mục
 
-Xem README §2. Phần đã có ở P0:
+Xem README §2. Hiện trạng 12/11/2026:
 
 ```text
-backend/app/{main.py, core/config.py, core/registry.py, api/health.py, api/models.py, schemas/}
-backend/tests/{test_api.py, test_check_artifacts.py}
-backend/Dockerfile, frontend/Dockerfile (nginx, proxy /api), docker-compose.yml
-frontend/src/{App.tsx, components/Layout.tsx, pages/*, i18n/{vi,en}.json, api/client.ts}
-scripts/{check_artifacts.py, run.py, fetch_artifacts.md}
+backend/app/
+  main.py                 FastAPI, CORS, lifespan nạp Registry
+  core/config.py          Settings (ARTIFACTS_DIR tính từ gốc repo, AUTH_*)
+  core/registry.py        nạp model card, samples, bảng, hình MỘT LẦN; model .pt: P1-1
+  core/auth.py            hai tài khoản cấu hình, cookie phiên ký HMAC (docs/accounts.md)
+  services/samples.py     đọc samples/*.json, tóm tắt cây, đếm node theo mốc
+  services/results.py     đọc tables/*.csv, results.csv, figs/*.png (giữ nguyên chuỗi)
+  services/inference.py   chưa có model: báo 503 rõ ràng (P1-1)
+  api/                    health, auth, models, graphs (datasets, timeline), predict,
+                          results, admin
+backend/tests/            41 test: API, auth, graphs, results, check_artifacts
+frontend/src/
+  api/                    client (cookie cùng origin), useApi (cache theo URL), types
+  auth/                   AuthProvider, RequireAuth, RequireAdmin
+  components/             PropagationTree, TimeSlider, PredictionGauge, EarlyCurve,
+                          TimeLegend, Sparkline, ResultTable, Segmented, StateView, Layout
+  pages/                  Login, Explorer, GraphDetail, Results, DataReliability, About,
+                          Admin, NotFound
+  lib/                    tree (bố cục radial d3-hierarchy), timeScale, format, markdown
+  content/                results.md, data_reliability.md (nhóm viết)
+  i18n/                   vi.json (mặc định), en.json
+scripts/                  check_artifacts.py, make_dev_artifacts.py, run.py
 ```
+
+## Giao diện
+
+- Đọc dữ liệu (Operate): trung tính, màu dành cho dữ liệu. Token màu sáng/tối ở
+  `styles/global.css`; thang thời gian 5 bậc `--t0…--t4` có bộ riêng cho chế độ tối.
+- Cây radial: gốc (bản tin) ở giữa, mỗi vòng một mức độ sâu, con xếp theo thời gian; kéo thanh
+  thời gian chỉ đổi class mờ/hiện, không tính lại bố cục.
+- Timeline lấy một lần cho mỗi đặc trưng; `useApi` cache theo URL nên kéo thanh trượt hay quay
+  lại trang không gọi API lặp lại.
+- Font Be Vietnam Pro tự host (@fontsource), icon lucide-react; không CDN khi build.
+- Kiểm tra trên Edge (Playwright, 12/11): không lỗi JS, không cuộn ngang ở 375 px, cây 384
+  node hiện trong ~0,5 giây (dữ liệu giả).

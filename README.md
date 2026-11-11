@@ -123,6 +123,10 @@ Số liệu trên trang Kết quả **chỉ** lấy từ `artifacts/tables` và 
 | GET | `/api/datasets/{ds}/graphs/{gid}/timeline?feature=bert` | xác suất tại các mốc `[0.5, 1, 3, 6, 12, 24, 72, 168, null]` (một lần gọi cho cả thanh trượt) |
 | GET | `/api/results/tables` | danh sách bảng; `/api/results/tables/{name}` trả JSON từ CSV |
 | GET | `/api/results/figures/{name}` | ảnh PNG |
+| POST | `/api/auth/login`, `/api/auth/logout`; GET `/api/auth/me` | đăng nhập hai vai trò `admin` / `user` ([tài khoản thử](docs/accounts.md)) |
+| GET | `/api/admin/status`; POST `/api/admin/reload` | chỉ `admin`: tình trạng và nạp lại artifacts |
+
+Chi tiết, mã lỗi và định dạng `samples/*.json`: [`docs/api.md`](docs/api.md).
 
 Quy tắc suy luận (phải khớp notebook, xem `notebooks/…ipynb` §3):
 1. Lấy `Data` từ `graphs/<ds>_<feature>_demo.pt`, đổi `x` sang float32.
@@ -204,24 +208,34 @@ Song song (nhóm làm, không giao cho agent): chạy notebook trên Colab, vi�
 |---|---|
 | Notebook tuần 3–5 (E0–E6, xuất artifacts) | ✅ viết xong · ⏳ chạy trên Colab |
 | P0 Khung repo | ✅ |
-| P1 Backend suy luận + parity test | ⏳ health, models xong; chờ notebook để port `graph_ops` |
-| P2 API kết quả | ⬜ |
-| P3 Trực quan hóa cây + phát hiện sớm | ⏳ khung frontend xong |
-| P4 Các trang còn lại + Docker | ⬜ |
+| P1 Backend suy luận + parity test | ⏳ đủ router (datasets, graphs, timeline, predict, auth, admin); suy luận chờ model đang huấn luyện và notebook (O-1) |
+| P2 API kết quả | ✅ |
+| P3 Trực quan hóa cây + phát hiện sớm | ⏳ cây radial, thanh thời gian, đường theo mốc xong; xác suất chờ model |
+| P4 Các trang còn lại + Docker | ⏳ Explorer, Results, DataReliability, About, Hệ thống, đăng nhập xong; Docker chưa chạy thử với torch |
+
+Cập nhật 12/11/2026. Chi tiết từng task: [`BACKLOG.md`](BACKLOG.md).
 | P5 Nghiệm thu, video, v1.0.0 | ⬜ |
 
 ---
 
-## 10. Chạy nhanh (sau khi P4 xong)
+## 10. Chạy nhanh
 
 ```bash
-# 1. tải thư mục export/ từ Drive (VKU-Study/DACN2/v2/export) về ./artifacts
-python scripts/check_artifacts.py
-# 2a. chạy dev
-make setup && make dev            # backend :8000, frontend :5173
+# 0. lần đầu: .venv + thư viện backend, npm install, pre-commit
+python scripts/run.py setup
+# 1. dữ liệu: tải export/ từ Drive (VKU-Study/DACN2/v2/export) về ./artifacts
+python scripts/check_artifacts.py --skip-models   # bỏ --skip-models khi đã có model
+#    chưa có export: sinh dữ liệu GIẢ để làm giao diện, rồi đặt ARTIFACTS_DIR=.cache/dev-artifacts trong .env
+python scripts/run.py devdata
+# 2a. chạy dev: hai terminal
+python scripts/run.py dev         # backend :8000 (/docs)
+cd frontend && npm run dev        # frontend :5173
 # 2b. hoặc Docker
-docker compose up --build
+docker compose up --build         # frontend :8080
 ```
+
+Đăng nhập bằng tài khoản thử trong [`docs/accounts.md`](docs/accounts.md)
+(`admin` / `admin@123`, `user` / `user@123`; chỉ dùng cho phát triển và demo).
 
 ## Nguồn dữ liệu và trích dẫn
 

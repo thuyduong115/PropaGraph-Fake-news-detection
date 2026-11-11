@@ -3,6 +3,7 @@
     python scripts/check_artifacts.py                     # đọc ARTIFACTS_DIR hoặc ./artifacts
     python scripts/check_artifacts.py --artifacts-dir D:/export
     python scripts/check_artifacts.py --skip-versions     # chưa cài torch, chỉ kiểm tra file
+    python scripts/check_artifacts.py --skip-models       # model đang huấn luyện: chỉ dữ liệu demo
 
 Mã thoát: 0 khi không có lỗi (có thể có cảnh báo), 1 khi có lỗi.
 Chỉ dùng thư viện chuẩn: chạy được trước khi cài torch / torch_geometric.
@@ -76,22 +77,28 @@ def _base_version(version: str) -> str:
     return version.split("+", 1)[0].strip()
 
 
-def check_files(root: Path, report: Report) -> None:
-    for rel in ("models/gnn_model.py", "models/golden_predictions.json", "results.csv"):
+def check_files(root: Path, report: Report, models: bool = True) -> None:
+    required = ["results.csv"]
+    if models:
+        required += ["models/gnn_model.py", "models/golden_predictions.json"]
+    for rel in required:
         _require_file(root, rel, report)
     _require_file(root, "tables/graph_meta.csv", report)
     _require_glob(root, "tables/*.csv", report, "bảng kết quả")
 
     for ds in DATASETS:
         _require_file(root, f"samples/{ds}.json", report)
-        for feat in FEATURES:
+        for feat in FEATURES if models else ():
             _require_file(root, f"graphs/{ds}_{feat}_demo.pt", report)
             _require_glob(root, f"models/{ds}_{feat}_*.pt", report, f"model {ds} × {feat}")
 
     if not list(root.glob("figs/*.png")):
         report.warnings.append("Thư mục figs/ không có ảnh PNG; trang Results sẽ thiếu hình.")
 
-    for rel in ("models/golden_predictions.json", *(f"samples/{ds}.json" for ds in DATASETS)):
+    json_files = [f"samples/{ds}.json" for ds in DATASETS]
+    if models:
+        json_files.append("models/golden_predictions.json")
+    for rel in json_files:
         path = root / rel
         if path.is_file():
             try:
@@ -144,7 +151,9 @@ def check_versions(card: dict, report: Report, installed=installed_version) -> N
             )
 
 
-def check(root: Path, *, versions: bool = True, installed=installed_version) -> Report:
+def check(
+    root: Path, *, versions: bool = True, models: bool = True, installed=installed_version
+) -> Report:
     report = Report()
     if not root.is_dir():
         report.errors.append(
@@ -156,9 +165,9 @@ def check(root: Path, *, versions: bool = True, installed=installed_version) -> 
             "artifacts/ còn thừa một cấp export/; chuyển nội dung export/ ra ngoài."
         )
         return report
-    card = load_model_card(root, report)
-    check_files(root, report)
-    if versions and card is not None:
+    card = load_model_card(root, report) if models else None
+    check_files(root, report, models=models)
+    if models and versions and card is not None:
         check_versions(card, report, installed)
     return report
 
@@ -174,10 +183,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--skip-versions", action="store_true", help="không so phiên bản torch / torch_geometric"
     )
+    parser.add_argument(
+        "--skip-models",
+        action="store_true",
+        help="bỏ qua model, model card, đồ thị .pt (model đang huấn luyện)",
+    )
     args = parser.parse_args(argv)
 
     root = args.artifacts_dir.resolve()
-    report = check(root, versions=not args.skip_versions)
+    report = check(root, versions=not args.skip_versions, models=not args.skip_models)
     print(f"Kiểm tra {root}")
     for msg in report.warnings:
         print(f"  CẢNH BÁO  {msg}")

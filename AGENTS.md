@@ -13,6 +13,8 @@ luyện trong notebook, trên đồ thị test của UPFD, và trực quan hóa 
 | [`DATA_BOUNDARY.md`](DATA_BOUNDARY.md) | Mọi thay đổi chạm tới artifacts, số liệu, endpoint, trang giao diện |
 | [`docs/architecture.md`](docs/architecture.md) | Thêm thành phần mới, đổi luồng dữ liệu |
 | [`docs/open_questions.md`](docs/open_questions.md) | Trước khi tự quyết một điểm chưa rõ trong yêu cầu |
+| [`docs/api.md`](docs/api.md) | Endpoint, mã lỗi, định dạng `samples/*.json` |
+| [`docs/accounts.md`](docs/accounts.md) | Tài khoản thử `admin` / `user`, quyền theo endpoint |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Nhánh, commit, PR |
 | [`BACKLOG.md`](BACKLOG.md) | Task đang làm và mã task (`P1-1`, `O-2`…) |
 
@@ -63,7 +65,12 @@ trực tiếp.
 11. **Không có bí mật trong git.** `.env`, `artifacts/**` bị bỏ qua và phải giữ như vậy.
 12. **Không chắc thì hỏi bằng văn bản.** Ghi câu hỏi vào `docs/open_questions.md` thay vì tự mở
     rộng hay thu hẹp phạm vi.
-13. **Luôn cập nhật `BACKLOG.md` và README §9 khi xong một việc**, trong cùng commit/PR:
+13. **Tài khoản thử phải có trong `docs/accounts.md`.** Thêm/đổi tài khoản, vai trò, mật khẩu
+    mặc định hay quyền của endpoint thì cập nhật file đó, `.env.example` và
+    `docker-compose.yml` cùng PR. Không thêm bảng người dùng hay lưu mật khẩu vào file.
+14. **Dữ liệu giả chỉ để làm giao diện.** `scripts/make_dev_artifacts.py` đánh dấu
+    `"synthetic": true`; không dùng ảnh chụp hay số liệu từ đó trong báo cáo.
+15. **Luôn cập nhật `BACKLOG.md` và README §9 khi xong một việc**, trong cùng commit/PR:
     đổi trạng thái task; việc phát sinh thì thêm dòng mới với mã kế tiếp (`O-3`…) trước khi
     làm.
 
@@ -71,7 +78,9 @@ trực tiếp.
 
 | Sửa | Cập nhật cùng PR |
 | --- | --- |
-| Thêm/đổi endpoint | `backend/app/schemas/`, `tests/test_api.py`, bảng API trong README §4, `docs/api.md` |
+| Thêm/đổi endpoint | `backend/app/schemas/`, test trong `backend/tests/`, bảng API trong README §4, `docs/api.md`, bảng quyền trong `docs/accounts.md` |
+| Tài khoản, vai trò, đăng nhập | `docs/accounts.md`, `.env.example`, `docker-compose.yml`, `tests/test_auth.py` |
+| Định dạng `samples/*.json` | `services/samples.py`, `docs/api.md`, `scripts/make_dev_artifacts.py` |
 | `services/graph_ops.py`, `services/inference.py` | `tests/test_parity.py` phải xanh; ghi rõ ô notebook tương ứng trong docstring |
 | Cấu trúc `artifacts/` mong đợi | `scripts/check_artifacts.py`, README §2, `DATA_BOUNDARY.md` mục 3 |
 | Biến môi trường mới | `.env.example`, `backend/app/core/config.py`, `docker-compose.yml` (khi có) |
@@ -86,6 +95,7 @@ trực tiếp.
 python scripts/run.py lint     # ruff + black --check (Windows không cần make)
 python scripts/run.py test     # pytest backend
 python scripts/run.py check    # scripts/check_artifacts.py (cần artifacts/)
+python scripts/run.py web      # eslint đã nằm trong lint; đây là typecheck + build frontend
 # trên Linux/WSL/CI: make lint | make test | make check
 ```
 

@@ -7,6 +7,7 @@ python scripts/run.py test     # pytest backend
 python scripts/run.py dev      # uvicorn --reload trên :8000
 python scripts/run.py check    # scripts/check_artifacts.py
 python scripts/run.py web      # typecheck + build frontend
+python scripts/run.py devdata  # sinh artifacts GIẢ vào .cache/dev-artifacts
 (frontend dev: cd frontend && npm run dev  → :5173)
 """
 
@@ -91,6 +92,10 @@ def web() -> None:
     _npm("run", "build")
 
 
+def devdata() -> None:
+    _run(_py(), str(ROOT / "scripts" / "make_dev_artifacts.py"), *sys.argv[2:])
+
+
 def check() -> None:
     _run(_py(), str(ROOT / "scripts" / "check_artifacts.py"), *sys.argv[2:])
 
@@ -103,6 +108,7 @@ COMMANDS = {
     "dev": dev,
     "check": check,
     "web": web,
+    "devdata": devdata,
 }
 
 if __name__ == "__main__":

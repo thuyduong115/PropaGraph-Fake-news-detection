@@ -12,6 +12,15 @@ services:
       ARTIFACTS_DIR: /app/artifacts
       DEVICE: ${DEVICE:-cpu}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080}
+      # Đăng nhập: docs/accounts.md. Đổi mật khẩu khi chạy ngoài máy phát triển.
+      AUTH_REQUIRED: ${AUTH_REQUIRED:-1}
+      AUTH_SECRET: ${AUTH_SECRET:-}
+      SESSION_HOURS: ${SESSION_HOURS:-12}
+      COOKIE_SECURE: ${COOKIE_SECURE:-0}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin@123}
+      USER_USERNAME: ${USER_USERNAME:-user}
+      USER_PASSWORD: ${USER_PASSWORD:-user@123}
     volumes:
       - ./artifacts:/app/artifacts:ro
     ports:

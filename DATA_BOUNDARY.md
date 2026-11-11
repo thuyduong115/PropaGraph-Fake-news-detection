@@ -73,7 +73,10 @@ Mọi endpoint nằm dưới `/api`. Bảng đầy đủ ở README §4; mỗi e
 | --- | --- |
 | `GET /api/health`, `/api/models`, `/api/datasets*`, `/api/results*` | Endpoint nhận URL/văn bản tin tức |
 | `POST /api/predict` trên `gid` có sẵn trong đồ thị demo | Endpoint huấn luyện, upload model hay upload đồ thị |
-| | Endpoint ghi vào `artifacts/` |
+| `/api/auth/*`: đăng nhập hai tài khoản cấu hình (docs/accounts.md) | Bảng người dùng, đăng ký tài khoản, lưu mật khẩu vào file |
+| `/api/admin/status`, `POST /api/admin/reload` (chỉ đọc lại artifacts) | Endpoint ghi vào `artifacts/` |
+
+Định dạng `samples/<dataset>.json` và nhóm bảng kết quả: `docs/api.md`.
 
 `POST /api/predict` là phép tính, không phải thao tác ghi. Nó chỉ nhận `{dataset, gid,
 feature, cutoff_h}`; `gid` ngoài tập demo trả `404`.
@@ -82,13 +85,19 @@ feature, cutoff_h}`; `gid` ngoài tập demo trả `404`.
 
 | Route | Trang | Nguồn số liệu |
 | --- | --- | --- |
+| `/login` | Đăng nhập | `/api/auth/login` |
 | `/` | Explorer | `/api/datasets/{ds}/graphs` |
 | `/graphs/:ds/:gid` | GraphDetail | `/api/datasets/{ds}/graphs/{gid}`, `/timeline`, `/api/predict` |
 | `/results` | Results | `/api/results/*` + diễn giải trong `content/results.md` |
 | `/data-reliability` | DataReliability | phát hiện ở notebook §1 qua `/api/results/*` |
-| `/about` | About | phương pháp, nhóm, miễn trừ |
+| `/about` | About | phương pháp, nhóm, miễn trừ (chuỗi i18n) |
+| `/admin` | Hệ thống (chỉ `admin`) | `/api/admin/status` |
 
-Route cụ thể được chốt ở P3; đổi route thì cập nhật bảng này.
+Đổi route thì cập nhật bảng này và `frontend/src/App.tsx`.
+
+Dữ liệu giả (`scripts/make_dev_artifacts.py`, đánh dấu `"synthetic": true`) chỉ để làm giao
+diện. Khi đang nạp dữ liệu giả, mọi trang hiện cảnh báo; không chụp màn hình hay lấy số từ đó
+cho báo cáo.
 
 ## 6. Một con số được phép khẳng định gì
 

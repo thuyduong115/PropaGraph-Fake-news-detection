@@ -2,41 +2,194 @@
   "app": { "name": "PropaGraph" },
   "nav": {
     "label": "Main navigation",
+    "skip": "Skip to content",
     "explorer": "Graphs",
     "results": "Results",
     "dataReliability": "Data reliability",
-    "about": "About"
+    "about": "About",
+    "admin": "System"
   },
   "tools": {
-    "language": "Tiếng Việt",
-    "darkMode": "Dark mode",
-    "lightMode": "Light mode"
+    "language": "VI",
+    "languageAria": "Switch to Vietnamese",
+    "darkMode": "Switch to dark mode",
+    "lightMode": "Switch to light mode",
+    "logout": "Sign out"
+  },
+  "roles": { "admin": "admin", "user": "user" },
+  "banner": {
+    "synthetic": "Synthetic development data is loaded. Do not use these numbers or screenshots in the report."
   },
   "footer": {
     "disclaimer": "A demonstration system for an academic project, running only on the published UPFD data. Its outputs are not fact-checking conclusions."
   },
-  "common": { "notBuilt": "This page has not been built yet (task {{task}})." },
+  "common": {
+    "loading": "Loading…",
+    "error": "Could not load data: {{message}}",
+    "retry": "Retry",
+    "empty": "No data yet.",
+    "yes": "Yes",
+    "no": "No",
+    "none": "None"
+  },
+  "time": {
+    "unknown": "Unknown",
+    "minutes": "{{value}} min",
+    "hours": "{{value}} h",
+    "days": "{{value}} days",
+    "all": "Full tree"
+  },
+  "labels": { "fake": "Fake", "real": "Real", "unknown": "Unknown" },
+  "datasets": { "politifact": "PolitiFact", "gossipcop": "GossipCop" },
+  "features": { "profile": "User profile", "bert": "BERT" },
+  "tree": {
+    "aria": "Propagation tree: showing {{visible}} of {{total}} nodes",
+    "rootTitle": "Root node: the news item",
+    "nodeTitle": "Node {{id}}, depth {{depth}}, appeared after {{time}}, {{degree}} onward shares",
+    "legend": "Propagation tree legend",
+    "legendRoot": "News item (root)",
+    "legendTime": "Share time",
+    "legendSize": "Larger node: shared onward more"
+  },
+  "detail": {
+    "back": "Graph list",
+    "panel": "Prediction and graph details",
+    "feature": "User feature",
+    "observedUntil": "Observed until",
+    "nodesVisible": "{{used}} / {{total}} nodes",
+    "modelPendingTitle": "No prediction yet",
+    "modelPendingBody": "The GNN model is still being trained. The probability will appear here once the model is loaded.",
+    "trueLabel": "True label",
+    "probFake": "Probability of fake",
+    "curveProb": "Probability of fake by observation time",
+    "curveNodes": "Observed nodes by time",
+    "curveAria": "Chart over observation cut-offs",
+    "nodes": "Nodes",
+    "depth": "Depth",
+    "span": "Propagation span",
+    "newsId": "FakeNewsNet id"
+  },
+  "explorer": {
+    "title": "Propagation trees",
+    "lead": "UPFD test graphs. Pick a tree to see how the news spread and to simulate early detection.",
+    "dataset": "Dataset",
+    "label": "Label",
+    "allLabels": "All",
+    "nodes": "Nodes",
+    "minNodes": "Minimum nodes",
+    "maxNodes": "Maximum nodes",
+    "min": "From",
+    "max": "To",
+    "sort": "Sort",
+    "sorts": {
+      "gid": "By id",
+      "-n_nodes": "Most nodes first",
+      "n_nodes": "Fewest nodes first",
+      "-depth": "Deepest first",
+      "-span_h": "Longest spread first"
+    },
+    "search": "Search titles",
+    "searchPlaceholder": "Type a keyword",
+    "empty": "No graph matches these filters. Widen the node range or clear the keyword.",
+    "count_one": "{{count}} graph",
+    "count_other": "{{count}} graphs",
+    "col": {
+      "gid": "Id",
+      "title": "Title",
+      "label": "Label",
+      "nodes": "Nodes",
+      "depth": "Depth",
+      "span": "Span",
+      "growth": "Growth"
+    },
+    "untitled": "Untitled ({{id}})",
+    "growthTitle": "Nodes at each time cut-off",
+    "pager": "Pagination",
+    "prev": "Previous",
+    "next": "Next",
+    "page": "Page {{page}} of {{pages}}"
+  },
+  "results": {
+    "title": "Experimental results",
+    "lead": "Tables exported by the notebook, shown verbatim. The notes under each table are written by the team.",
+    "empty": "No result tables yet. The notebook must export tables/ and results.csv into artifacts.",
+    "figures": "Figures",
+    "noInterpretation": "The team has not written a note for this table yet."
+  },
+  "reliability": {
+    "title": "Data reliability",
+    "lead": "What to know about UPFD before reading the results, from notebook §1.",
+    "topicsTitle": "Findings",
+    "topics": {
+      "labels": "Label convention",
+      "nodeOrder": "Node index is not time order",
+      "timeNoise": "Timestamp noise in PolitiFact",
+      "gossipcopIds": "GossipCop news ids",
+      "duplicateTitles": "Duplicate titles",
+      "rootUser": "Root node shared with a user"
+    },
+    "empty": "No data-reliability tables in artifacts yet."
+  },
+  "about": {
+    "title": "About",
+    "lead": "PropaGraph demonstrates fake news detection from propagation graphs with graph neural networks.",
+    "methodTitle": "Method",
+    "method": "Each news item is a propagation tree: the root is the news, the other nodes are users who shared it, and edges are sharing relations. GNN models (GCN, GAT, GraphSAGE, GIN) learn a representation of the whole tree to predict real or fake, on the UPFD dataset (PolitiFact and GossipCop). The project asks three questions:",
+    "questions": [
+      "How much does propagation structure contribute compared with content and user features?",
+      "Which feature types and architectures matter most?",
+      "How early can fake news be detected when only part of the tree is observed?"
+    ],
+    "scopeTitle": "Scope",
+    "doesTitle": "The system does",
+    "does": [
+      "Browse sample propagation trees from PolitiFact and GossipCop.",
+      "Draw trees radially, coloured by time and sized by onward shares.",
+      "Predict real or fake with a probability using the trained GNN.",
+      "Simulate early detection with a time slider.",
+      "Show experimental results and data-reliability findings from the notebook."
+    ],
+    "doesNotTitle": "The system does not",
+    "doesNot": [
+      "Accept new URLs or news text: UPFD has no source text and user features can no longer be re-collected.",
+      "Retrain the model.",
+      "Fact-check real-world news."
+    ],
+    "teamTitle": "Team",
+    "course": "Specialised project 2, class 23GITB, Vietnam-Korea University of Information and Communication Technology.",
+    "supervisor": "Supervisor",
+    "citationsTitle": "Data and citations",
+    "disclaimerTitle": "Disclaimer"
+  },
+  "login": {
+    "title": "Sign in",
+    "intro": "Use the account provided for the demo.",
+    "username": "Username",
+    "password": "Password",
+    "invalid": "Wrong username or password. Check them and try again.",
+    "failed": "Could not reach the server. Check that the backend is running, then retry.",
+    "submit": "Sign in",
+    "submitting": "Signing in…"
+  },
+  "admin": {
+    "forbidden": "This page is for the admin account only.",
+    "title": "System",
+    "lead": "Status of the loaded artifacts. After copying a new export, reload.",
+    "artifactsDir": "Artifacts folder",
+    "loadedAt": "Loaded at",
+    "synthetic": "Synthetic data",
+    "datasets": "Graphs",
+    "tables": "Tables",
+    "figures": "Figures",
+    "modelCard": "Model card",
+    "models": "Loaded models",
+    "problems": "Errors",
+    "notes": "Notes",
+    "reload": "Reload artifacts",
+    "reloading": "Reloading…",
+    "reloaded": "Artifacts reloaded."
+  },
   "pages": {
-    "explorer": {
-      "title": "Browse propagation trees",
-      "summary": "Test graphs from PolitiFact and GossipCop, filtered by label, size and title."
-    },
-    "graphDetail": {
-      "title": "Propagation tree detail",
-      "summary": "The propagation tree, a time slider and the predicted probability for the observed part of the tree."
-    },
-    "results": {
-      "title": "Experimental results",
-      "summary": "Tables E0–E6 read from the notebook outputs."
-    },
-    "dataReliability": {
-      "title": "Data reliability",
-      "summary": "Findings about the UPFD data from notebook §1."
-    },
-    "about": {
-      "title": "About",
-      "summary": "Method, team and scope of the system."
-    },
-    "notFound": { "title": "Page not found", "back": "Back to graphs" }
+    "notFound": { "title": "Page not found", "back": "Back to the graph list" }
   }
 }
