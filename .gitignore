@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Bí mật
+.env
+
+# Artifacts xuất từ notebook: KHÔNG commit (README §2). Chỉ giữ thư mục rỗng.
+artifacts/**
+!artifacts/
+!artifacts/.gitkeep
+
+# Model / checkpoint lạc chỗ
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Node / frontend
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Cache, file tạm
+.cache/
+coverage/
+htmlcov/
+.coverage
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

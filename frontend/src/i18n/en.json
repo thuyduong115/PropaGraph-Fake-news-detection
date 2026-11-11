@@ -1,0 +1,42 @@
+{
+  "app": { "name": "PropaGraph" },
+  "nav": {
+    "label": "Main navigation",
+    "explorer": "Graphs",
+    "results": "Results",
+    "dataReliability": "Data reliability",
+    "about": "About"
+  },
+  "tools": {
+    "language": "Tiếng Việt",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode"
+  },
+  "footer": {
+    "disclaimer": "A demonstration system for an academic project, running only on the published UPFD data. Its outputs are not fact-checking conclusions."
+  },
+  "common": { "notBuilt": "This page has not been built yet (task {{task}})." },
+  "pages": {
+    "explorer": {
+      "title": "Browse propagation trees",
+      "summary": "Test graphs from PolitiFact and GossipCop, filtered by label, size and title."
+    },
+    "graphDetail": {
+      "title": "Propagation tree detail",
+      "summary": "The propagation tree, a time slider and the predicted probability for the observed part of the tree."
+    },
+    "results": {
+      "title": "Experimental results",
+      "summary": "Tables E0–E6 read from the notebook outputs."
+    },
+    "dataReliability": {
+      "title": "Data reliability",
+      "summary": "Findings about the UPFD data from notebook §1."
+    },
+    "about": {
+      "title": "About",
+      "summary": "Method, team and scope of the system."
+    },
+    "notFound": { "title": "Page not found", "back": "Back to graphs" }
+  }
+}

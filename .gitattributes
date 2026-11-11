@@ -1,0 +1,6 @@
+# Giữ LF cho mọi file văn bản (Dockerfile, script shell chạy trên Linux)
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.png binary
+*.pt binary
+*.woff2 binary

@@ -1,0 +1,58 @@
+name: PR conventions
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  conventions:
+    name: Tên nhánh, tiêu đề PR, commit message
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Kiểm tra tên nhánh
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          re='^(feat|fix|docs|chore|exp|refactor|test|ci)/([PO][0-9]+-[0-9]+-)?[a-z0-9][a-z0-9-]*$'
+          if [[ "$BRANCH" =~ ^dependabot/ ]] || [[ "$BRANCH" =~ $re ]]; then
+            echo "OK: $BRANCH"
+          else
+            echo "::error::Tên nhánh '$BRANCH' không đúng quy ước <type>/<ID>-<mo-ta-ngan> (vd: feat/P1-1-registry)"
+            exit 1
+          fi
+
+      - name: Kiểm tra tiêu đề PR
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          re='^(feat|fix|docs|chore|exp|refactor|test|ci|perf|build|style|revert)(\([A-Za-z0-9_-]+\))?!?: .+'
+          if [[ "$TITLE" =~ $re ]]; then
+            echo "OK: $TITLE"
+          else
+            echo "::error::Tiêu đề PR '$TITLE' không theo Conventional Commits (vd: feat(P1-1): nạp model card)"
+            exit 1
+          fi
+
+      - name: Kiểm tra commit message
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          re='^(feat|fix|docs|chore|exp|refactor|test|ci|perf|build|style|revert)(\([A-Za-z0-9_-]+\))?!?: .+'
+          bad=0
+          while IFS= read -r line; do
+            sha="${line%% *}"; msg="${line#* }"
+            [[ "$msg" =~ ^Merge\  ]] && continue
+            if [[ ! "$msg" =~ $re ]]; then
+              echo "::error::Commit $sha không theo Conventional Commits: $msg"
+              bad=1
+            fi
+          done < <(git log --format='%h %s' "$BASE..$HEAD")
+          exit $bad

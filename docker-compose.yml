@@ -1,0 +1,28 @@
+# docker compose up --build  →  frontend http://localhost:8080, backend http://localhost:8000
+# Hoàn thiện và nghiệm thu ở BACKLOG P4-2.
+services:
+  backend:
+    build:
+      context: ./backend
+      args:
+        TORCH_VERSION: ${TORCH_VERSION:-}
+        PYG_VERSION: ${PYG_VERSION:-}
+    image: propagraph-backend:dev
+    environment:
+      ARTIFACTS_DIR: /app/artifacts
+      DEVICE: ${DEVICE:-cpu}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080}
+    volumes:
+      - ./artifacts:/app/artifacts:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    image: propagraph-frontend:dev
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:8080:80"
+    restart: unless-stopped

@@ -1,0 +1,42 @@
+{
+  "app": { "name": "PropaGraph" },
+  "nav": {
+    "label": "Điều hướng chính",
+    "explorer": "Đồ thị",
+    "results": "Kết quả",
+    "dataReliability": "Độ tin cậy dữ liệu",
+    "about": "Giới thiệu"
+  },
+  "tools": {
+    "language": "English",
+    "darkMode": "Giao diện tối",
+    "lightMode": "Giao diện sáng"
+  },
+  "footer": {
+    "disclaimer": "Hệ thống minh họa cho đồ án học thuật, chỉ chạy trên dữ liệu UPFD đã công bố. Kết quả không phải là kết luận kiểm chứng thông tin."
+  },
+  "common": { "notBuilt": "Trang này chưa được xây dựng (task {{task}})." },
+  "pages": {
+    "explorer": {
+      "title": "Duyệt cây lan truyền",
+      "summary": "Danh sách đồ thị test của PolitiFact và GossipCop, lọc theo nhãn, kích thước và tiêu đề."
+    },
+    "graphDetail": {
+      "title": "Chi tiết cây lan truyền",
+      "summary": "Cây lan truyền, thanh thời gian và xác suất dự đoán theo phần cây đã quan sát."
+    },
+    "results": {
+      "title": "Kết quả thực nghiệm",
+      "summary": "Các bảng E0–E6 đọc từ kết quả notebook."
+    },
+    "dataReliability": {
+      "title": "Độ tin cậy dữ liệu",
+      "summary": "Các phát hiện về dữ liệu UPFD ở notebook §1."
+    },
+    "about": {
+      "title": "Giới thiệu",
+      "summary": "Phương pháp, nhóm thực hiện và phạm vi của hệ thống."
+    },
+    "notFound": { "title": "Không tìm thấy trang", "back": "Về trang đồ thị" }
+  }
+}
