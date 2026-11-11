@@ -34,11 +34,11 @@ propagraph/
 ├── docker-compose.yml
 ├── .env.example
 ├── notebooks/
-│   └── DACN2_tuan3-5.ipynb       ← nguồn sự thật của mọi số liệu; chạy trên Colab
+│   └── DACN2_v2.ipynb            ← KHÔNG commit (gitignore), chỉ giữ trên máy; nguồn sự thật của mọi số liệu; chạy trên Colab
 ├── artifacts/                    ← KHÔNG commit (gitignore); copy từ Drive: VKU-Study/DACN2/v2/export/
 │   ├── models/
 │   │   ├── gnn_model.py          ← SINH TỰ ĐỘNG từ notebook, không sửa tay
-│   │   ├── model_card.json       ← cấu hình, F1, phiên bản torch/pyg
+│   │   ├── model_card.json       ← danh sách model: cấu hình, F1, label_map, phiên bản torch/pyg
 │   │   ├── golden_predictions.json ← xác suất chuẩn để test parity
 │   │   └── <dataset>_<feature>_<conv>.pt
 │   ├── graphs/<dataset>_<feature>_demo.pt   ← list[torch_geometric.data.Data], x lưu float16
@@ -128,11 +128,11 @@ Số liệu trên trang Kết quả **chỉ** lấy từ `artifacts/tables` và 
 
 Chi tiết, mã lỗi và định dạng `samples/*.json`: [`docs/api.md`](docs/api.md).
 
-Quy tắc suy luận (phải khớp notebook, xem `notebooks/…ipynb` §3):
+Quy tắc suy luận (phải khớp notebook, xem `notebooks/DACN2_v2.ipynb` §3 và §10):
 1. Lấy `Data` từ `graphs/<ds>_<feature>_demo.pt`, đổi `x` sang float32.
 2. Nếu có `cutoff_h`: giữ gốc + user có `rt <= cutoff_h`; user mất cha được **nối lại vào gốc** (`keep_nodes`).
 3. Chuyển sang đồ thị vô hướng (`to_undirected`).
-4. `model(batch).softmax(1)[:, 1]` = xác suất **fake**. Nhãn: `label_map` trong `model_card.json` (đã đối chiếu với FakeNewsNet trong notebook §1.1).
+4. `model(batch).softmax(1)[:, k]` = xác suất **fake**, với `k` là lớp mang nhãn `fake` trong `label_map` (hiện là 1). Nhãn: `label_map` trong `model_card.json` (đã đối chiếu với FakeNewsNet trong notebook §1.1).
 
 ---
 
@@ -206,11 +206,11 @@ Song song (nhóm làm, không giao cho agent): chạy notebook trên Colab, vi�
 
 | Hạng mục | Trạng thái |
 |---|---|
-| Notebook tuần 3–5 (E0–E6, xuất artifacts) | ✅ viết xong · ⏳ chạy trên Colab |
+| Notebook (E0–E6, xuất artifacts) | ✅ đã chạy trên Colab, `export/` đã copy về `artifacts/` |
 | P0 Khung repo | ✅ |
-| P1 Backend suy luận + parity test | ⏳ đủ router (datasets, graphs, timeline, predict, auth, admin); suy luận chờ model đang huấn luyện và notebook (O-1) |
+| P1 Backend suy luận + parity test | ✅ nạp 4 model theo model card, `graph_ops` port 1:1, `predict` + xác suất trong `timeline`, parity test xanh |
 | P2 API kết quả | ✅ |
-| P3 Trực quan hóa cây + phát hiện sớm | ⏳ cây radial, thanh thời gian, đường theo mốc xong; xác suất chờ model |
+| P3 Trực quan hóa cây + phát hiện sớm | ⏳ cây radial, thanh thời gian, đường theo mốc xong; API đã trả xác suất, còn kiểm tra giao diện với dữ liệu thật |
 | P4 Các trang còn lại + Docker | ⏳ Explorer, Results, DataReliability, About, Hệ thống, đăng nhập xong; Docker chưa chạy thử với torch |
 
 Cập nhật 12/11/2026. Chi tiết từng task: [`BACKLOG.md`](BACKLOG.md).

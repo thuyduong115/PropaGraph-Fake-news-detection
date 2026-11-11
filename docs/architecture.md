@@ -5,7 +5,7 @@
 ```text
 ┌──────────────────────┐  §10 xuất   ┌────────────────────┐  copy tay  ┌──────────────┐
 │ Colab notebook       │ ──────────► │ Drive: export/     │ ─────────► │ artifacts/   │
-│ DACN2_tuan3-5.ipynb  │             │ VKU-Study/DACN2/v2 │            │ (read-only)  │
+│ DACN2_v2.ipynb       │             │ VKU-Study/DACN2/v2 │            │ (read-only)  │
 └──────────────────────┘             └────────────────────┘            └──────┬───────┘
                                                                               │ nạp 1 lần
                                                                               ▼ (lifespan)
