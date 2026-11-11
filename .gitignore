@@ -39,3 +39,6 @@ htmlcov/
 Thumbs.db
 .vscode/
 .idea/
+
+# Skill của Claude Code (bên thứ ba), chỉ dùng trên máy, không đưa lên repo
+.claude/

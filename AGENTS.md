@@ -102,7 +102,8 @@ python scripts/run.py check    # scripts/check_artifacts.py (cần artifacts/)
   hàm, khoá cấu hình, tên endpoint: tiếng Anh.
 - Máy phát triển chạy Windows: dùng `python scripts/run.py …` thay cho `make`.
 - Skill giao diện (`.claude/skills/impeccable`, `.claude/skills/ui-ux-pro-max`) là mã bên thứ
-  ba, chỉ dùng khi làm frontend (P3–P4); không sửa, không lint.
+  ba, chỉ dùng khi làm frontend (P3–P4); không sửa, không lint. `.claude/` bị `.gitignore`,
+  không đưa lên repo: mỗi máy tự chép skill vào `.claude/skills/`.
 
 ## Thứ tự triển khai
 
