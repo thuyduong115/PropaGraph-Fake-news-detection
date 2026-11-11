@@ -35,6 +35,8 @@ def status(reg: Annotated[Registry, Depends(get_registry)]) -> AdminStatus:
 def reload(request: Request) -> AdminStatus:
     """Nạp lại artifacts sau khi copy bản export mới, không cần khởi động lại backend.
     Chỉ đọc `artifacts/`, không ghi."""
-    reg = Registry.load(request.app.state.settings.artifacts_path)
+    reg = Registry.load(
+        request.app.state.settings.artifacts_path, request.app.state.settings.device
+    )
     request.app.state.registry = reg
     return _status(reg)

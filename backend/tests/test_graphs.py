@@ -53,7 +53,7 @@ def test_predict_503_until_model_ready(client: TestClient) -> None:
     body = {"dataset": "politifact", "gid": 1, "feature": "bert", "cutoff_h": None}
     resp = client.post("/api/predict", json=body)
     assert resp.status_code == 503
-    assert "huấn luyện" in resp.json()["detail"]
+    assert "Chưa nạp model" in resp.json()["detail"]
     assert client.post("/api/predict", json={**body, "gid": 99}).status_code == 404
     assert client.post("/api/predict", json={**body, "feature": "spacy"}).status_code == 422
 

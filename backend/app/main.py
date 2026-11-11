@@ -20,7 +20,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-        app.state.registry = Registry.load(settings.artifacts_path)
+        app.state.registry = Registry.load(settings.artifacts_path, settings.device)
         yield
 
     app = FastAPI(title="PropaGraph API", version=__version__, lifespan=lifespan)
