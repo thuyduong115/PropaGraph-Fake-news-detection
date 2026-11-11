@@ -11,12 +11,12 @@ nằm dưới `/api`, chỉ đọc artifacts. Đăng nhập và quyền: [`accou
 | POST | `/api/auth/login` | công khai | body `{username, password}` → đặt cookie phiên, trả `{username, role, auth_required}` | xong |
 | POST | `/api/auth/logout` | công khai | xoá cookie, 204 | xong |
 | GET | `/api/auth/me` | user | tài khoản hiện tại | xong |
-| GET | `/api/models` | user | nguyên văn `model_card.json`; 503 khi chưa có | xong (chờ model card) |
+| GET | `/api/models` | user | nguyên văn `model_card.json` (danh sách, mỗi mục một model); 503 khi chưa có | xong |
 | GET | `/api/datasets` | user | `[{name, n_graphs, labels}]` | xong |
 | GET | `/api/datasets/{ds}/graphs` | user | danh sách tóm tắt; query `label`, `min_nodes`, `max_nodes`, `q`, `sort` (`gid`, `n_nodes`, `depth`, `span_h`, thêm `-` để giảm dần), `page`, `size` (≤ 200) | xong |
 | GET | `/api/datasets/{ds}/graphs/{gid}` | user | cây đầy đủ: `nodes[{id, depth, t_rel_h}]`, `edges[[src, dst]]` + tóm tắt | xong |
-| GET | `/api/datasets/{ds}/graphs/{gid}/timeline?feature=` | user | mọi mốc `[0.5, 1, 3, 6, 12, 24, 72, 168, null]`: `n_nodes_used`, `prob_fake` (`null` khi chưa có model), `model_ready` | xong phần số node; xác suất chờ P1-1 |
-| POST | `/api/predict` | user | body `{dataset, gid, feature, cutoff_h}` → `{prob_fake, pred_label, n_nodes_used, n_nodes_total, model}`; **503** khi chưa có model | chờ P1-1 |
+| GET | `/api/datasets/{ds}/graphs/{gid}/timeline?feature=` | user | mọi mốc `[0.5, 1, 3, 6, 12, 24, 72, 168, null]`: `n_nodes_used`, `prob_fake` (`null` khi chưa có model), `model_ready`; một lần forward cho cả 9 mốc | xong |
+| POST | `/api/predict` | user | body `{dataset, gid, feature, cutoff_h}` → `{prob_fake, pred_label, n_nodes_used, n_nodes_total, model}` (`model` = tên file trong model card); **503** khi chưa có model | xong |
 | GET | `/api/results/tables?group=` | user | `[{name, group, n_rows}]`; `group` ∈ `experiment`, `reliability`, `summary`, `meta` | xong |
 | GET | `/api/results/tables/{name}` | user | `{columns, rows}`, giá trị giữ nguyên chuỗi trong CSV | xong |
 | GET | `/api/results/figures` | user | `[{name, url}]` | xong |

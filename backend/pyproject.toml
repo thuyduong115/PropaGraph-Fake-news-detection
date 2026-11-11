@@ -15,9 +15,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# torch và torch_geometric PHẢI khớp model_card.json (AGENTS.md quy tắc 4). Chưa có model card
-# nên chưa ghim; cài riêng theo hướng dẫn README, rồi ghim tại đây ở P1-1.
-ml = []
+# torch và torch_geometric PHẢI khớp model_card.json (AGENTS.md quy tắc 4). Model card ghi
+# torch 2.14.1+cu130 (Colab GPU); backend dùng bản CPU cùng phiên bản:
+#   pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+#   pip install -e "backend[ml]"
+ml = [
+  "torch==2.14.1",
+  "torch_geometric==2.8.1",
+]
 dev = [
   "pytest>=8.2",
   "httpx>=0.27",

@@ -99,3 +99,35 @@ def test_skip_models_only_checks_demo_data(tmp_path: Path) -> None:
         p.unlink()
     assert not ca.check(root, versions=False).ok
     assert ca.check(root, models=False).ok
+
+
+def _list_card(**extra) -> list[dict]:
+    """Model card dạng danh sách như notebook §10 xuất (giá trị giả)."""
+    return [
+        {"dataset": ds, "feature": f, "file": f"{ds}_{f}_fakeconv.pt", "label_map": {}, **extra}
+        for ds in ("politifact", "gossipcop")
+        for f in ("profile", "bert")
+    ]
+
+
+def test_list_card_passes(tmp_path: Path) -> None:
+    card = _list_card(torch="2.3.1+cu121", torch_geometric="2.5.3")
+    root = make_fake_artifacts(tmp_path / "a", card=card)
+    installed = _installed({"torch": "2.3.1+cpu", "torch_geometric": "2.5.3"})
+    report = ca.check(root, installed=installed)
+    assert report.ok, report.errors
+
+
+def test_list_card_named_file_must_exist(tmp_path: Path) -> None:
+    card = _list_card()
+    card[0]["file"] = "khong_co.pt"
+    root = make_fake_artifacts(tmp_path / "a", card=card)
+    report = ca.check(root, versions=False)
+    assert any("models/khong_co.pt" in e for e in report.errors)
+
+
+def test_list_card_label_maps_must_agree(tmp_path: Path) -> None:
+    card = _list_card()
+    card[1]["label_map"] = {"0": "x"}
+    root = make_fake_artifacts(tmp_path / "a", card=card)
+    assert any("label_map khác nhau" in e for e in ca.check(root, versions=False).errors)

@@ -18,7 +18,7 @@ Không có mũi tên nào đi ngược từ backend hay frontend về `artifacts
 
 | Vùng | Lưu ở | Ghi bởi (duy nhất) | Nguồn sự thật? | Sinh lại được? |
 | --- | --- | --- | --- | --- |
-| Thực nghiệm | `notebooks/DACN2_tuan3-5.ipynb` | Nhóm, trên Colab | Có: nguồn của mọi số liệu | — |
+| Thực nghiệm | `notebooks/DACN2_v2.ipynb` | Nhóm, trên Colab | Có: nguồn của mọi số liệu | — |
 | Export | Drive `VKU-Study/DACN2/v2/export/` | Notebook §10 | Có, bản phát hành của notebook | Có: chạy lại notebook |
 | Artifacts | `artifacts/` (không commit) | Người copy tay từ Drive | Không: bản sao của export | Có: copy lại |
 | Bộ nhớ backend | `app.state.registry` | `core/registry.py` lúc khởi động | Không: dẫn xuất | Có: khởi động lại |
@@ -53,9 +53,9 @@ báo.
 | Đường dẫn | Bắt buộc | Dùng ở |
 | --- | --- | --- |
 | `models/gnn_model.py` | Có | `registry` (định nghĩa model, sinh tự động) |
-| `models/model_card.json` | Có | `/api/models`, `/api/health`, `label_map`, phiên bản |
+| `models/model_card.json` | Có. Danh sách, mỗi mục một model: `dataset`, `feature`, `conv`, `file`, `in_dim`, `label_map` (giống nhau ở mọi mục), `torch`, `torch_geometric` | `/api/models`, `/api/health`, `label_map`, phiên bản |
 | `models/golden_predictions.json` | Có | `tests/test_parity.py` |
-| `models/<dataset>_<feature>_<conv>.pt` | Có, mỗi cặp dataset × feature ít nhất một | `services/inference.py` |
+| `models/<dataset>_<feature>_<conv>.pt` | Có, đúng file ghi ở mục `file` của model card cho mỗi cặp dataset × feature | `services/inference.py` |
 | `graphs/<dataset>_<feature>_demo.pt` | Có, cho 2 dataset × 2 feature | `services/inference.py` |
 | `samples/<dataset>.json` | Có, cho 2 dataset | `/api/datasets/{ds}/graphs*` |
 | `tables/graph_meta.csv` | Có | metadata đồ thị |

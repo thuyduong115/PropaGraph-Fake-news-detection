@@ -15,7 +15,7 @@ from app.schemas.graphs import (
     Timeline,
     TimelinePoint,
 )
-from app.services.inference import model_ready
+from app.services import inference
 from app.services.samples import TIMELINE, Graph, observed_count
 
 router = APIRouter(tags=["graphs"], dependencies=[Depends(current_principal)])
@@ -93,12 +93,21 @@ def timeline(
     gid: int,
     feature: Feature = "bert",
 ) -> Timeline:
-    """Số node và xác suất tại mọi mốc trong một lần gọi. Chưa có model: `prob_fake = null`."""
+    """Số node và xác suất tại mọi mốc trong một lần gọi. Chưa có model: `prob_fake = null`.
+
+    `n_nodes_used` luôn đếm từ samples; khi có model, nó phải bằng số node model thấy (kiểm
+    tra trong `tests/test_parity.py`)."""
     g = _graph_or_404(reg, ds, gid)
-    ready = model_ready(reg, ds, feature)
+    ready = inference.model_ready(reg, ds, feature)
+    probs: list[float | None] = [None] * len(TIMELINE)
+    if ready:
+        try:
+            probs = [p for p, _ in inference.probs(reg, ds, feature, gid, list(TIMELINE))]
+        except inference.ModelUnavailable:
+            ready = False
     points = [
-        TimelinePoint(cutoff_h=c, n_nodes_used=observed_count(g.nodes, c), prob_fake=None)
-        for c in TIMELINE
+        TimelinePoint(cutoff_h=c, n_nodes_used=observed_count(g.nodes, c), prob_fake=p)
+        for c, p in zip(TIMELINE, probs, strict=True)
     ]
     return Timeline(
         dataset=ds,

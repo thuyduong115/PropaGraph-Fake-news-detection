@@ -11,8 +11,8 @@ router = APIRouter(tags=["models"], dependencies=[Depends(current_principal)])
 
 
 @router.get("/models")
-def model_card(reg: Annotated[Registry, Depends(get_registry)]) -> dict[str, Any]:
-    """Trả nguyên văn `model_card.json`; không thêm, không sửa số liệu."""
+def model_card(reg: Annotated[Registry, Depends(get_registry)]) -> Any:
+    """Trả nguyên văn `model_card.json` (danh sách model); không thêm, không sửa số liệu."""
     if reg.model_card is None:
         raise HTTPException(
             status_code=503, detail="Chưa có models/model_card.json (model đang huấn luyện)"

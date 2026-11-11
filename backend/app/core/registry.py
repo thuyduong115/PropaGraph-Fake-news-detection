@@ -1,7 +1,11 @@
 """Nạp artifacts MỘT LẦN khi khởi động (AGENTS.md quy tắc 5).
 
-Đã nạp: `model_card.json` (nếu có), `samples/<dataset>.json`, `tables/*.csv`, `results.csv`,
-danh sách `figs/*.png`. Chưa nạp: model `.pt` và đồ thị `.pt` (P1-1, model đang huấn luyện).
+Nạp: `model_card.json`, model `.pt` + đồ thị `graphs/*_demo.pt` (khi đã cài torch),
+`samples/<dataset>.json`, `tables/*.csv`, `results.csv`, danh sách `figs/*.png`.
+
+`model_card.json` do notebook §10 xuất là **danh sách**, mỗi phần tử một model
+(`dataset`, `feature`, `conv`, `file`, `in_dim`, `label_map`, `torch`, `torch_geometric`…).
+Dạng object một model (có `label_map` ở cấp ngoài) vẫn được nhận.
 """
 
 from __future__ import annotations
@@ -25,7 +29,8 @@ FEATURES = ("profile", "bert")
 @dataclass
 class Registry:
     artifacts_dir: Path
-    model_card: dict[str, Any] | None = None
+    model_card: dict[str, Any] | list[Any] | None = None
+    device: str = "cpu"
     models: dict[str, Any] = field(default_factory=dict)
     graphs: dict[str, dict[int, Graph]] = field(default_factory=dict)
     tables: dict[str, Table] = field(default_factory=dict)
@@ -36,8 +41,8 @@ class Registry:
     loaded_at: float = 0.0
 
     @classmethod
-    def load(cls, artifacts_dir: Path) -> Registry:
-        reg = cls(artifacts_dir=artifacts_dir.resolve(), loaded_at=time.time())
+    def load(cls, artifacts_dir: Path, device: str = "cpu") -> Registry:
+        reg = cls(artifacts_dir=artifacts_dir.resolve(), loaded_at=time.time(), device=device)
         root = reg.artifacts_dir
         if not root.is_dir():
             reg.problems.append(f"Không thấy thư mục artifacts: {root}")
@@ -49,8 +54,9 @@ class Registry:
         reg.tables, table_problems = load_tables(root)
         reg.problems.extend(table_problems)
         reg.figures = load_figures(root)
+        reg._load_models(root)
         if not reg.models:
-            reg.notes.append("Chưa nạp model GNN: dự đoán chưa khả dụng (BACKLOG P1-1).")
+            reg.notes.append("Chưa nạp model GNN: dự đoán chưa khả dụng.")
         for msg in reg.problems:
             log.warning(msg)
         return reg
@@ -66,10 +72,40 @@ class Registry:
             self.problems.append(f"models/model_card.json không hợp lệ: {exc}")
 
     @property
+    def card_entries(self) -> list[dict[str, Any]]:
+        """Các model trong model card, đã chuẩn hóa thành danh sách object."""
+        card = self.model_card
+        if isinstance(card, dict):
+            return [card]
+        if isinstance(card, list):
+            return [e for e in card if isinstance(e, dict)]
+        return []
+
+    @property
     def label_map(self) -> dict[str, Any] | None:
-        card = self.model_card or {}
-        lm = card.get("label_map")
-        return lm if isinstance(lm, dict) else None
+        maps = [e["label_map"] for e in self.card_entries if isinstance(e.get("label_map"), dict)]
+        return maps[0] if maps else None
+
+    def _load_models(self, root: Path) -> None:
+        entries = [e for e in self.card_entries if e.get("file")]
+        if not entries:
+            return
+        maps = {json.dumps(e.get("label_map"), sort_keys=True) for e in self.card_entries}
+        if len(maps) > 1:
+            self.problems.append("Các model trong model_card.json có label_map khác nhau.")
+            return
+        try:
+            import torch  # noqa: F401
+            import torch_geometric  # noqa: F401
+        except ImportError:
+            self.notes.append(
+                "Chưa cài torch / torch_geometric: không nạp model (xem README, model_card.json)."
+            )
+            return
+        from app.services.inference import load_models
+
+        self.models, problems = load_models(root, entries, self.device)
+        self.problems.extend(problems)
 
     def _load_samples(self, root: Path) -> None:
         for ds in DATASETS:

@@ -42,7 +42,7 @@ SAMPLE_GRAPHS = [
 ]
 
 
-def make_fake_artifacts(root: Path, card: dict | None = None) -> Path:
+def make_fake_artifacts(root: Path, card: dict | list | None = None) -> Path:
     """Tạo đủ cây thư mục artifacts theo README §2, nội dung giả."""
     for sub in ("models", "graphs", "samples", "tables", "figs"):
         (root / sub).mkdir(parents=True, exist_ok=True)

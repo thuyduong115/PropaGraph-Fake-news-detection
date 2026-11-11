@@ -22,7 +22,8 @@ from pathlib import Path
 DATASETS = ("politifact", "gossipcop")
 FEATURES = ("profile", "bert")
 
-# Khoá phiên bản trong model_card.json: chưa chốt (docs/open_questions.md #2), nhận các dạng sau.
+# Khoá phiên bản trong mỗi mục của model_card.json. Notebook §10 ghi `torch` / `torch_geometric`
+# ở cấp ngoài cùng của từng mục (docs/open_questions.md #2); các dạng cũ vẫn được nhận.
 VERSION_KEYS = {
     "torch": (("versions", "torch"), ("torch",), ("torch_version",)),
     "torch_geometric": (
@@ -77,7 +78,9 @@ def _base_version(version: str) -> str:
     return version.split("+", 1)[0].strip()
 
 
-def check_files(root: Path, report: Report, models: bool = True) -> None:
+def check_files(
+    root: Path, report: Report, models: bool = True, entries: list[dict] | None = None
+) -> None:
     required = ["results.csv"]
     if models:
         required += ["models/gnn_model.py", "models/golden_predictions.json"]
@@ -90,7 +93,17 @@ def check_files(root: Path, report: Report, models: bool = True) -> None:
         _require_file(root, f"samples/{ds}.json", report)
         for feat in FEATURES if models else ():
             _require_file(root, f"graphs/{ds}_{feat}_demo.pt", report)
-            _require_glob(root, f"models/{ds}_{feat}_*.pt", report, f"model {ds} × {feat}")
+            named = [
+                e["file"]
+                for e in entries or []
+                if e.get("dataset") == ds and e.get("feature") == feat and e.get("file")
+            ]
+            if len(named) > 1:
+                report.errors.append(f"model_card.json có nhiều model cho {ds} × {feat}.")
+            if named:
+                _require_file(root, f"models/{named[0]}", report)
+            else:
+                _require_glob(root, f"models/{ds}_{feat}_*.pt", report, f"model {ds} × {feat}")
 
     if not list(root.glob("figs/*.png")):
         report.warnings.append("Thư mục figs/ không có ảnh PNG; trang Results sẽ thiếu hình.")
@@ -107,7 +120,8 @@ def check_files(root: Path, report: Report, models: bool = True) -> None:
                 report.errors.append(f"{rel} không phải JSON hợp lệ: {exc}")
 
 
-def load_model_card(root: Path, report: Report) -> dict | None:
+def load_model_card(root: Path, report: Report) -> list[dict] | None:
+    """Trả danh sách mục của model card: list (mỗi mục một model) hoặc một object."""
     if not _require_file(root, "models/model_card.json", report):
         return None
     try:
@@ -115,12 +129,17 @@ def load_model_card(root: Path, report: Report) -> dict | None:
     except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         report.errors.append(f"models/model_card.json không phải JSON hợp lệ: {exc}")
         return None
-    if not isinstance(card, dict):
-        report.errors.append("models/model_card.json phải là một object JSON.")
+    entries = card if isinstance(card, list) else [card]
+    if not entries or not all(isinstance(e, dict) for e in entries):
+        report.errors.append(
+            "models/model_card.json phải là một object hoặc danh sách object (mỗi model một mục)."
+        )
         return None
-    if "label_map" not in card:
+    if any("label_map" not in e for e in entries):
         report.errors.append("models/model_card.json thiếu khoá label_map (AGENTS.md quy tắc 6).")
-    return card
+    elif len({json.dumps(e["label_map"], sort_keys=True) for e in entries}) > 1:
+        report.errors.append("Các mục trong models/model_card.json có label_map khác nhau.")
+    return entries
 
 
 def installed_version(dist: str) -> str | None:
@@ -130,9 +149,13 @@ def installed_version(dist: str) -> str | None:
         return None
 
 
-def check_versions(card: dict, report: Report, installed=installed_version) -> None:
+def check_versions(entries: list[dict], report: Report, installed=installed_version) -> None:
     for dist, paths in VERSION_KEYS.items():
-        expected = _lookup(card, paths)
+        found = {v for v in (_lookup(e, paths) for e in entries) if v is not None}
+        if len(found) > 1:
+            report.errors.append(f"model_card.json ghi nhiều phiên bản {dist}: {sorted(found)}.")
+            continue
+        expected = next(iter(found), None)
         if expected is None:
             report.warnings.append(
                 f"model_card.json không ghi phiên bản {dist}; bỏ qua so phiên bản "
@@ -166,7 +189,7 @@ def check(
         )
         return report
     card = load_model_card(root, report) if models else None
-    check_files(root, report, models=models)
+    check_files(root, report, models=models, entries=card)
     if models and versions and card is not None:
         check_versions(card, report, installed)
     return report

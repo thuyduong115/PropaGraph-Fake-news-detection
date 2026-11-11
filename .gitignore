@@ -17,6 +17,9 @@ artifacts/**
 !artifacts/
 !artifacts/.gitkeep
 
+# Notebook chỉ giữ trên máy, không commit (BACKLOG O-1)
+notebooks/*.ipynb
+
 # Model / checkpoint lạc chỗ
 *.pt
 *.pth
