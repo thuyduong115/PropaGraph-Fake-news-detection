@@ -1,5 +1,5 @@
 <!--
-Diễn giải độ tin cậy dữ liệu do NHÓM viết (README §5, notebook §1). Agent không viết nội dung.
+Diễn giải độ tin cậy dữ liệu do NHÓM viết (docs/development.md §5, notebook §1). Agent không viết nội dung.
 Tiêu đề "## <khoá>" khớp với chủ đề trên trang (labels, nodeOrder, timeNoise, gossipcopIds,
 duplicateTitles, rootUser) hoặc tên bảng CSV (vd "## R1" khớp R1_*.csv).
 Không chép số liệu vào đây: số liệu hiển thị lấy từ API.

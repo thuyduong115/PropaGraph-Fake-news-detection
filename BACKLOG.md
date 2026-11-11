@@ -2,14 +2,14 @@
 
 Hạn nộp: **30/11/2026**. Trạng thái: To Do / In Progress / Done.
 
-**Cập nhật file này ngay khi xong một việc**, trong cùng commit/PR, kèm bảng tiến độ README §9
+**Cập nhật file này ngay khi xong một việc**, trong cùng commit/PR, kèm bảng tiến độ docs/development.md §9
 (`AGENTS.md` quy tắc 15).
 
 Đối chiếu đề cương (DCCT_DACN2): tuần 4 (03–09/11) backend suy luận FastAPI; tuần 5 (10–16/11)
 giao diện trực quan hóa cây; tuần 6 (17–23/11) tích hợp và kiểm thử; tuần 7 (24–30/11) báo cáo,
 slide tiếng Anh. Phần huấn luyện model do nhóm chạy trên Colab, không thuộc backlog này.
 
-## Hệ thống minh họa (README §6)
+## Hệ thống minh họa (docs/development.md §6)
 
 | ID | Task | Tiêu chí hoàn thành | Hạn | Trạng thái |
 |---|---|---|---|---|
@@ -19,7 +19,7 @@ slide tiếng Anh. Phần huấn luyện model do nhóm chạy trên Colab, khô
 | P1-2 | Router `health`, `models`, `graphs`, `predict`, `timeline` + schemas. `timeline` trả số node và `prob_fake` mọi mốc (một lần forward); `predict` trả 503 khi chưa nạp model | `pytest tests/test_api.py`; `/docs` đủ endpoint | 15/11 | Done |
 | P2-1 | Router `results` (CSV → JSON, PNG), nạp một lần khi khởi động, nhóm bảng theo tên | Trả đúng số dòng từng CSV (`tests/test_results.py`) | 15/11 | Done |
 | P3-1 | Frontend khung: Vite + React + TS + router + layout + i18n vi/en + dark mode + đăng nhập. Kiểu dữ liệu viết tay ở `api/types.ts`; sinh `schema.d.ts` bằng `npm run gen:api` khi API chốt | `npm run build` thành công | 16/11 | Done |
-| P3-2 | `PropagationTree` (radial, màu theo thời gian thang log, kích thước theo số lượt chia sẻ tiếp) + `GraphDetail`. Đã đo trên dữ liệu giả: cây 384 node hiện trong ~0,5 giây kể cả tải API. Còn đo lại với dữ liệu thật | Cây 500 node render < 1 giây | 18/11 | In Progress |
+| P3-2 | `PropagationTree` (radial, màu theo thời gian thang log, kích thước theo số lượt chia sẻ tiếp) + `GraphDetail`. Đã đo trên dữ liệu giả: cây 384 node hiện trong ~0,5 giây kể cả tải API. Dữ liệu thật: cây 497 node vẽ đúng, API chi tiết + timeline 112 ms; còn đo thời gian vẽ trong trình duyệt | Cây 500 node render < 1 giây | 18/11 | In Progress |
 | P3-3 | `TimeSlider` + `PredictionGauge` + `EarlyCurve` nối API timeline. Kéo qua 9 mốc: 0 lần gọi API. Gauge và đường xác suất hiện trạng thái "chưa có dự đoán" tới khi có model | Kéo slider không gọi API lặp lại | 19/11 | In Progress |
 | P4-1 | `Explorer` (lọc nhãn, số node, tìm tiêu đề, sắp xếp, phân trang, sparkline), `Results`, `DataReliability`, `About`, trang `Hệ thống` cho admin | Nội dung lấy 100% từ API | 21/11 | Done |
 | P4-2 | Docker: `docker compose up` chạy cả hai service, artifacts mount read-only (đã có Dockerfile + compose; chưa chạy thử với torch thật) | Chạy trên máy sạch theo README | 22/11 | In Progress |
@@ -39,6 +39,7 @@ slide tiếng Anh. Phần huấn luyện model do nhóm chạy trên Colab, khô
 | O-7 | Nhóm viết diễn giải trong `frontend/src/content/results.md` và `data_reliability.md` | To Do |
 | O-8 | CI GitHub Actions báo `startup_failure` (cả repo cũ): kiểm tra Billing/Actions của tài khoản | To Do |
 | O-9 | `model_card.json` thật là danh sách (mỗi model một mục): `check_artifacts.py` và registry nhận dạng này; ghim `torch==2.14.1`, `torch_geometric==2.8.1` (bản CPU) trong `backend[ml]` | Done |
+| O-10 | Sửa sau khi kiểm tra với dữ liệu thật: bảng `ALL_*` lên trang Kết quả; chú thích thang màu ghi rõ là thang chung; bán kính vòng cây theo số node + so le (cây 497 node không còn dồn); bảng pivot nhiều tầng tiêu đề (E0) hiển thị đúng | Done |
 
 ## Việc cần làm tiếp theo
 

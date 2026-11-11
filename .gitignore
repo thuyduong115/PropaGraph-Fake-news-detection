@@ -12,7 +12,7 @@ venv/
 # Bí mật
 .env
 
-# Artifacts xuất từ notebook: KHÔNG commit (README §2). Chỉ giữ thư mục rỗng.
+# Artifacts xuất từ notebook: KHÔNG commit (docs/development.md §2). Chỉ giữ thư mục rỗng.
 artifacts/**
 !artifacts/
 !artifacts/.gitkeep

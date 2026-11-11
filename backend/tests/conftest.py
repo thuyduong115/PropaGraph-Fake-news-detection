@@ -43,7 +43,7 @@ SAMPLE_GRAPHS = [
 
 
 def make_fake_artifacts(root: Path, card: dict | list | None = None) -> Path:
-    """Tạo đủ cây thư mục artifacts theo README §2, nội dung giả."""
+    """Tạo đủ cây thư mục artifacts theo docs/development.md §2, nội dung giả."""
     for sub in ("models", "graphs", "samples", "tables", "figs"):
         (root / sub).mkdir(parents=True, exist_ok=True)
     (root / "models/model_card.json").write_text(json.dumps(card or FAKE_CARD), encoding="utf-8")
@@ -53,6 +53,7 @@ def make_fake_artifacts(root: Path, card: dict | list | None = None) -> Path:
     (root / "tables/graph_meta.csv").write_text("gid\n0\n", encoding="utf-8")
     (root / "tables/E0_main.csv").write_text("a,b\n1,2\n3,4\n", encoding="utf-8")
     (root / "tables/R1_labels.csv").write_text("finding\nx\n", encoding="utf-8")
+    (root / "tables/ALL_summary.csv").write_text("a\n1\n", encoding="utf-8")
     (root / "figs/fake.png").write_bytes(b"\x89PNG\r\n\x1a\n")
     for ds in DATASETS:
         payload = {"graphs": SAMPLE_GRAPHS}

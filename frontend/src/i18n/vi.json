@@ -48,7 +48,7 @@
     "nodeTitle": "Node {{id}}, độ sâu {{depth}}, xuất hiện sau {{time}}, {{degree}} lượt chia sẻ tiếp",
     "legend": "Chú giải cây lan truyền",
     "legendRoot": "Bản tin (gốc)",
-    "legendTime": "Thời điểm chia sẻ",
+    "legendTime": "Thang màu thời điểm chia sẻ (chung cho mọi cây)",
     "legendSize": "Node lớn hơn: được chia sẻ tiếp nhiều hơn"
   },
   "detail": {

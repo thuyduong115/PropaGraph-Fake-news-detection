@@ -10,8 +10,11 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-# Bảng thực nghiệm E0–E6 → trang Results; bảng khác (trừ graph_meta) → DataReliability.
+# Theo tên notebook §9–§10 xuất (docs/open_questions.md #9): `E<số>_*` → thực nghiệm,
+# `results` và `ALL_*` (bảng tổng hợp §9.3) → tổng hợp, cả hai lên trang Results;
+# `graph_meta` → meta; còn lại (`reliability_*`…) → DataReliability.
 _EXPERIMENT = re.compile(r"^E\d", re.IGNORECASE)
+_SUMMARY = re.compile(r"^ALL_", re.IGNORECASE)
 _NAME = re.compile(r"^[A-Za-z0-9_.-]+$")
 
 
@@ -24,7 +27,7 @@ class Table:
 
 
 def table_group(name: str) -> str:
-    if name == "results":
+    if name == "results" or _SUMMARY.match(name):
         return "summary"
     if name == "graph_meta":
         return "meta"

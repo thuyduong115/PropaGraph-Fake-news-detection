@@ -67,7 +67,7 @@ Dataset: `politifact`, `gossipcop`. Feature: `profile`, `bert`.
 
 ## 4. API namespace
 
-Mọi endpoint nằm dưới `/api`. Bảng đầy đủ ở README §4; mỗi endpoint chỉ đọc.
+Mọi endpoint nằm dưới `/api`. Bảng đầy đủ ở docs/development.md §4; mỗi endpoint chỉ đọc.
 
 | Được phép | Không được thêm |
 | --- | --- |
@@ -114,7 +114,7 @@ cho báo cáo.
 | Điểm | Quyết định |
 | --- | --- |
 | `cutoff_h = null` | Dùng toàn bộ cây. |
-| Mốc thời gian của timeline | Cố định `[0.5, 1, 3, 6, 12, 24, 72, 168, null]` (README §4); một lần gọi cho cả thanh trượt. |
+| Mốc thời gian của timeline | Cố định `[0.5, 1, 3, 6, 12, 24, 72, 168, null]` (docs/development.md §4); một lần gọi cho cả thanh trượt. |
 | User mất cha khi cắt thời gian | Nối lại vào gốc (`keep_nodes`), đúng như notebook. |
 | Chỉ số node và thời gian | Chỉ số node không phải thứ tự thời gian; thời gian lấy từ `t_rel_h` / `rt`. |
 | Nghĩa của lớp 0/1 | Theo `label_map` trong `model_card.json`, đã đối chiếu FakeNewsNet ở notebook §1.1. |

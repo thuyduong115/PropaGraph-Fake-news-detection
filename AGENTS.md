@@ -9,7 +9,8 @@ luyện trong notebook, trên đồ thị test của UPFD, và trực quan hóa 
 
 | File | Khi nào cần |
 | --- | --- |
-| [`README.md`](README.md) | Phạm vi, API, giao diện, kế hoạch P0–P5, kịch bản demo |
+| [`README.md`](README.md) | Giới thiệu cho người đọc ngoài (thầy, người xem repo public): giữ ngắn, không số liệu thực nghiệm |
+| [`docs/development.md`](docs/development.md) | Đặc tả: phạm vi, cấu trúc, API, giao diện, kế hoạch P0–P5, kịch bản demo, tiến độ |
 | [`DATA_BOUNDARY.md`](DATA_BOUNDARY.md) | Mọi thay đổi chạm tới artifacts, số liệu, endpoint, trang giao diện |
 | [`docs/architecture.md`](docs/architecture.md) | Thêm thành phần mới, đổi luồng dữ liệu |
 | [`docs/open_questions.md`](docs/open_questions.md) | Trước khi tự quyết một điểm chưa rõ trong yêu cầu |
@@ -26,7 +27,7 @@ luyện trong notebook, trên đồ thị test của UPFD, và trực quan hóa 
 | Artifacts | `artifacts/` (copy tay từ Drive, không commit) | Model, đồ thị demo, mẫu JSON, bảng, hình | Bị sửa bởi mã trong repo |
 | Nạp | `backend/app/core/registry.py` | Nạp artifacts **một lần** trong `lifespan` | Đọc file trong từng request |
 | Dịch vụ | `backend/app/services/` | Cắt thời gian, suy luận, đọc bảng kết quả | Huấn luyện; tự tính lại số liệu thực nghiệm |
-| API | `backend/app/api/` | REST `/api/*` theo README §4 | Nhận URL/văn bản tin tức mới; endpoint huấn luyện |
+| API | `backend/app/api/` | REST `/api/*` theo docs/development.md §4 | Nhận URL/văn bản tin tức mới; endpoint huấn luyện |
 | Giao diện | `frontend/` | Explorer, GraphDetail, Results, DataReliability, About | Gọi gì khác ngoài `/api/*`; hard-code số liệu |
 
 Chiều phụ thuộc chỉ đi một hướng:
@@ -70,7 +71,7 @@ trực tiếp.
     `docker-compose.yml` cùng PR. Không thêm bảng người dùng hay lưu mật khẩu vào file.
 14. **Dữ liệu giả chỉ để làm giao diện.** `scripts/make_dev_artifacts.py` đánh dấu
     `"synthetic": true`; không dùng ảnh chụp hay số liệu từ đó trong báo cáo.
-15. **Luôn cập nhật `BACKLOG.md` và README §9 khi xong một việc**, trong cùng commit/PR:
+15. **Luôn cập nhật `BACKLOG.md` và docs/development.md §9 khi xong một việc**, trong cùng commit/PR:
     đổi trạng thái task; việc phát sinh thì thêm dòng mới với mã kế tiếp (`O-3`…) trước khi
     làm.
 
@@ -78,16 +79,16 @@ trực tiếp.
 
 | Sửa | Cập nhật cùng PR |
 | --- | --- |
-| Thêm/đổi endpoint | `backend/app/schemas/`, test trong `backend/tests/`, bảng API trong README §4, `docs/api.md`, bảng quyền trong `docs/accounts.md` |
+| Thêm/đổi endpoint | `backend/app/schemas/`, test trong `backend/tests/`, bảng API trong docs/development.md §4, `docs/api.md`, bảng quyền trong `docs/accounts.md` |
 | Tài khoản, vai trò, đăng nhập | `docs/accounts.md`, `.env.example`, `docker-compose.yml`, `tests/test_auth.py` |
 | Định dạng `samples/*.json` | `services/samples.py`, `docs/api.md`, `scripts/make_dev_artifacts.py` |
 | `services/graph_ops.py`, `services/inference.py` | `tests/test_parity.py` phải xanh; ghi rõ ô notebook tương ứng trong docstring |
-| Cấu trúc `artifacts/` mong đợi | `scripts/check_artifacts.py`, README §2, `DATA_BOUNDARY.md` mục 3 |
+| Cấu trúc `artifacts/` mong đợi | `scripts/check_artifacts.py`, docs/development.md §2, `DATA_BOUNDARY.md` mục 3 |
 | Biến môi trường mới | `.env.example`, `backend/app/core/config.py`, `docker-compose.yml` (khi có) |
 | Phiên bản torch / pyg | Chỉ theo `model_card.json` mới; cập nhật `backend/pyproject.toml` |
 | Trang/route giao diện | `DATA_BOUNDARY.md` mục 5, `vi.json` + `en.json` |
 | Thêm thành phần kiến trúc | `docs/architecture.md` |
-| Xong / dở một task | `BACKLOG.md`, README §9 |
+| Xong / dở một task | `BACKLOG.md`, docs/development.md §9 |
 
 ## Kiểm tra trước khi xong
 
@@ -121,6 +122,6 @@ python scripts/run.py web      # eslint đã nằm trong lint; đây là typeche
 2. P1: registry + `graph_ops` + inference, parity test xanh; router health/models/graphs/predict.
 3. P2: router results.
 4. P3–P4: frontend, các trang còn lại, Docker.
-5. P5: nghiệm thu theo README §8, video, tag `v1.0.0`.
+5. P5: nghiệm thu theo docs/development.md §8, video, tag `v1.0.0`.
 
-P0 → P1 → P2 bắt buộc xong trước khi làm frontend (README §6).
+P0 → P1 → P2 bắt buộc xong trước khi làm frontend (docs/development.md §6).

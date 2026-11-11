@@ -1,4 +1,4 @@
-"""Đọc `samples/<dataset>.json` (cây lan truyền dạng JSON nhẹ, README §2).
+"""Đọc `samples/<dataset>.json` (cây lan truyền dạng JSON nhẹ, docs/development.md §2).
 
 Định dạng mong đợi ghi ở `docs/api.md` mục "Định dạng samples". Các phép tính ở đây chỉ là
 thống kê cấu trúc (đếm node, độ sâu, khoảng thời gian), không phải số liệu thực nghiệm.
@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-# Mốc thời gian (giờ) của thanh trượt; None = toàn bộ cây (README §4).
+# Mốc thời gian (giờ) của thanh trượt; None = toàn bộ cây (docs/development.md §4).
 TIMELINE: tuple[float | None, ...] = (0.5, 1, 3, 6, 12, 24, 72, 168, None)
 
 

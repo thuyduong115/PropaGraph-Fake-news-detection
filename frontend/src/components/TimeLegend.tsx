@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { formatHours } from "../lib/format";
 import { TIME_STOPS_H } from "../lib/timeScale";
 
-/** Chú giải thang màu thời gian và kích thước node. */
+/** Chú giải thang màu thời gian (cố định, giống nhau cho mọi cây; hai đầu bị kẹp) và kích thước node. */
 export default function TimeLegend() {
   const { t, i18n } = useTranslation();
   return (
@@ -22,7 +22,7 @@ export default function TimeLegend() {
           ))}
         </span>
         <span className="legend-range">
-          {formatHours(TIME_STOPS_H[0], t, i18n.language)} →{" "}
+          ≤ {formatHours(TIME_STOPS_H[0], t, i18n.language)} → ≥{" "}
           {formatHours(TIME_STOPS_H[TIME_STOPS_H.length - 1], t, i18n.language)}
         </span>
       </span>

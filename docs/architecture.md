@@ -31,11 +31,11 @@
 - **Cơ sở dữ liệu**: ≤ 200 đồ thị / tập, chỉ đọc, nạp vào RAM dư sức. Thêm DB tạo thêm nguồn
   sự thật thứ hai cho số liệu.
 - **GPU**: model nhỏ, suy luận từng đồ thị; CPU đủ nhanh cho demo.
-- **Huấn luyện trong backend**: ngoài phạm vi (README §1); mọi thay đổi model đi qua notebook.
+- **Huấn luyện trong backend**: ngoài phạm vi (docs/development.md §1); mọi thay đổi model đi qua notebook.
 
 ## Cấu trúc thư mục
 
-Xem README §2. Hiện trạng 12/11/2026:
+Xem docs/development.md §2. Hiện trạng 12/11/2026:
 
 ```text
 backend/app/

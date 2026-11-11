@@ -25,6 +25,35 @@ export interface PlacedEdge {
   path: string;
 }
 
+// Khoảng cách tối thiểu (đơn vị viewBox) giữa hai node liền nhau trên một vòng, khoảng cách
+// giữa hai vòng độ sâu, và độ lệch giữa các vòng phụ khi so le.
+const NODE_GAP = 7;
+const RING_GAP = 70;
+const FIRST_RING = 130;
+const STAGGER_STEP = 16;
+
+/** Số vòng phụ để so le node khi một độ sâu quá đông (giữ cây gọn mà không đè node). */
+function staggerOf(count: number): number {
+  return count > 160 ? 3 : count > 70 ? 2 : 1;
+}
+
+/**
+ * Bán kính từng độ sâu: đủ chu vi cho số node ở độ sâu đó (sau khi so le), luôn cách vòng
+ * trước ít nhất RING_GAP. Trả bán kính vòng chính và số vòng phụ của mỗi độ sâu.
+ */
+function ringRadii(counts: number[]): { ring: number[]; stagger: number[] } {
+  const ring = [0];
+  const stagger = [1];
+  for (let d = 1; d < counts.length; d++) {
+    const st = staggerOf(counts[d]);
+    const need = (counts[d] * NODE_GAP) / (2 * Math.PI * st);
+    const prevOuter = ring[d - 1] + (stagger[d - 1] - 1) * STAGGER_STEP;
+    ring.push(Math.max(d === 1 ? FIRST_RING : 0, prevOuter + RING_GAP, need));
+    stagger.push(st);
+  }
+  return { ring, stagger };
+}
+
 export interface TreeLayout {
   nodes: PlacedNode[];
   edges: PlacedEdge[];
@@ -62,21 +91,38 @@ export function layoutTree(nodes: TreeNode[], edges: [number, number][]): TreeLa
   const h = hierarchy(root, (d) => d.children);
   // con sớm nằm trước: các nhánh xếp theo thời gian quanh vòng
   h.sort((a, b) => (a.data.node.t_rel_h ?? 0) - (b.data.node.t_rel_h ?? 0));
-  const levels = Math.max(1, h.height);
-  const radius = 60 + levels * 70;
   const placed = tree<Datum>()
-    .size([2 * Math.PI, radius])
+    .size([2 * Math.PI, 1])
     .separation((a, b) => (a.parent === b.parent ? 1 : 2) / Math.max(1, a.depth))(h);
+
+  // Bán kính theo số node mỗi độ sâu (thay cho bán kính cố định): cây lớn không bị dồn vòng.
+  const all = placed.descendants();
+  const counts = new Array<number>(h.height + 1).fill(0);
+  for (const n of all) counts[n.depth] += 1;
+  const { ring, stagger } = ringRadii(counts);
+  const byDepth = new Map<number, HierarchyPointNode<Datum>[]>();
+  for (const n of all) {
+    const list = byDepth.get(n.depth);
+    if (list) list.push(n);
+    else byDepth.set(n.depth, [n]);
+  }
+  const rOf = new Map<HierarchyPointNode<Datum>, number>();
+  for (const [d, ns] of byDepth) {
+    ns.sort((a, b) => a.x - b.x);
+    ns.forEach((n, i) => rOf.set(n, ring[d] + (i % stagger[d]) * STAGGER_STEP));
+  }
+  const radius = Math.max(...all.map((n) => rOf.get(n) ?? 0));
 
   const point = (n: HierarchyPointNode<Datum>): [number, number] => {
     const angle = n.x - Math.PI / 2;
-    return [n.y * Math.cos(angle), n.y * Math.sin(angle)];
+    const r = rOf.get(n) ?? 0;
+    return [r * Math.cos(angle), r * Math.sin(angle)];
   };
 
   let maxT = 0;
   const out: PlacedNode[] = [];
   const outEdges: PlacedEdge[] = [];
-  for (const n of placed.descendants()) {
+  for (const n of all) {
     const [x, y] = point(n);
     const deg = degree.get(n.data.id) ?? 0;
     const t = n.data.node.t_rel_h;

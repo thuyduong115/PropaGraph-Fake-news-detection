@@ -1,4 +1,4 @@
-/** Mini-sparkline kích thước cây theo các mốc thời gian (README §5, trang Explorer). */
+/** Mini-sparkline kích thước cây theo các mốc thời gian (docs/development.md §5, trang Explorer). */
 export default function Sparkline({ values, label }: { values: number[]; label: string }) {
   const w = 96;
   const h = 24;

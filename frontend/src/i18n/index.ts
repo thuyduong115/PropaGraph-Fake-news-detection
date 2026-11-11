@@ -14,7 +14,7 @@ function savedLanguage(): string {
   return "vi";
 }
 
-// Tiếng Việt mặc định; tiếng Anh cho báo cáo/slide (README §5). Mọi chuỗi UI nằm trong JSON.
+// Tiếng Việt mặc định; tiếng Anh cho báo cáo/slide (docs/development.md §5). Mọi chuỗi UI nằm trong JSON.
 void i18n.use(initReactI18next).init({
   resources: { vi: { translation: vi }, en: { translation: en } },
   lng: savedLanguage(),

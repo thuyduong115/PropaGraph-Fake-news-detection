@@ -48,7 +48,7 @@
     "nodeTitle": "Node {{id}}, depth {{depth}}, appeared after {{time}}, {{degree}} onward shares",
     "legend": "Propagation tree legend",
     "legendRoot": "News item (root)",
-    "legendTime": "Share time",
+    "legendTime": "Share-time colour scale (same for every tree)",
     "legendSize": "Larger node: shared onward more"
   },
   "detail": {

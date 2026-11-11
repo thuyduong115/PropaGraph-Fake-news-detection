@@ -23,7 +23,7 @@
 1. Tạo nhánh từ `main` mới nhất.
 2. Tiêu đề PR theo cùng format commit; mô tả theo template.
 3. CI xanh: lint (ruff, black), test (pytest), quy ước tên nhánh/tiêu đề/commit.
-4. Cập nhật `BACKLOG.md` và bảng tiến độ README §9.
+4. Cập nhật `BACKLOG.md` và bảng tiến độ docs/development.md §9.
 5. Merge kiểu **Squash and merge**, xoá nhánh sau khi merge.
 
 ## Chạy kiểm tra cục bộ

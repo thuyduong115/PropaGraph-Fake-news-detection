@@ -1,4 +1,6 @@
-"""Kiểm tra thư mục artifacts/ trước khi chạy backend (README §2, DATA_BOUNDARY.md mục 3).
+"""Kiểm tra thư mục artifacts/ trước khi chạy backend.
+
+Xem docs/development.md §2 và DATA_BOUNDARY.md mục 3.
 
     python scripts/check_artifacts.py                     # đọc ARTIFACTS_DIR hoặc ./artifacts
     python scripts/check_artifacts.py --artifacts-dir D:/export

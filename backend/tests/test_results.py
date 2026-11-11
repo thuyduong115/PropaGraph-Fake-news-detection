@@ -8,6 +8,7 @@ def test_tables_listed_with_groups_and_row_counts(client: TestClient) -> None:
     assert tables["E0_main"] == {"name": "E0_main", "group": "experiment", "n_rows": 2}
     assert tables["R1_labels"]["group"] == "reliability"
     assert tables["results"]["group"] == "summary"
+    assert tables["ALL_summary"]["group"] == "summary"
     assert tables["graph_meta"]["group"] == "meta"
     only = client.get("/api/results/tables", params={"group": "experiment"}).json()
     assert [t["name"] for t in only] == ["E0_main"]
